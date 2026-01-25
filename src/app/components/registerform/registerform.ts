@@ -10,7 +10,11 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './registerform.css',
 })
 export class Registerform {
-  @Output() goToLogin = new EventEmitter<void>(); 
+  @Output() goToLogin = new EventEmitter<void>();
+
+  // ✅ URL del backend en producción (Render)
+  // (si luego quieres, esto lo movemos a environment)
+  private readonly API = 'https://family-scheduler-project-backend.onrender.com';
 
   message = '';
   loading = false;
@@ -25,7 +29,7 @@ export class Registerform {
   constructor(private http: HttpClient) {}
 
   pulsarVerPassword() {
-    this.inputType.update(val => (val === 'password' ? 'text' : 'password'));
+    this.inputType.update((val) => (val === 'password' ? 'text' : 'password'));
   }
 
   submit() {
@@ -40,7 +44,8 @@ export class Registerform {
     this.loading = true;
     const payload = this.form.getRawValue();
 
-    this.http.post('http://localhost:8000/auth/register', payload).subscribe({
+    // ✅ ya no localhost:8000 — ahora Render
+    this.http.post(`${this.API}/auth/register`, payload).subscribe({
       next: (res) => {
         console.log('REGISTER OK:', res);
         this.loading = false;
@@ -50,7 +55,7 @@ export class Registerform {
         );
 
         if (go) {
-          this.goToLogin.emit(); // 👈 AQUÍ ABRES LOGIN DESDE LANDING
+          this.goToLogin.emit(); // abre login desde landing
         } else {
           this.form.reset();
         }
