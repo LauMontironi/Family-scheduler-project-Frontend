@@ -124,7 +124,7 @@ En producción, el backend debe permitir CORS desde la URL de Netlify.
 En plan free de Render, el backend puede tardar en "despertar" la primera vez.
 
 📷 Demo
-Frontend (Netlify): (por añadir)
+Frontend (Netlify): https://family-scheduler-front.netlify.app/
 
 Backend (Render): https://family-scheduler-project-backend.onrender.com
 ```
