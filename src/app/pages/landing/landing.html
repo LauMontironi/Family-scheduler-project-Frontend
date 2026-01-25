@@ -1,0 +1,116 @@
+<!-- HERO -->
+<section class="container py-5">
+    <div class="row align-items-center g-5">
+        <!-- TEXTO -->
+        <div class="col-lg-6">
+            <span class="badge rounded-pill text-bg-light px-3 py-2 mb-3">
+                ✨ Smart family management
+            </span>
+
+            <h1 class="display-4 fw-bold lh-1">
+                Keep Your Family <span class="text-primary">in Sync</span>
+            </h1>
+
+            <p class="lead text-muted mt-3">
+                One shared calendar for parents and kids. Activities, school, medical appointments and reminders — all
+                in one place.
+            </p>
+
+            <div class="hero-actions mt-4">
+                <button class="btn btn-primary rounded-pill px-4" (click)="openRegister()">
+                    Join the family
+                </button>
+
+                <button class="btn btn-outline-dark rounded-pill px-4" (click)="openLogin()">
+                    Welcome back
+                </button>
+            </div>
+
+            <p class="text-muted small mt-3">
+                No credit card required · Free forever
+            </p>
+        </div>
+
+        <!-- IMAGEN -->
+        <div class="col-lg-6">
+            <div class="hero-illustration p-3 rounded-4 shadow-sm bg-white">
+                <img src="/family_shedule_landing_page.png" alt="Family using calendar" class="hero-image" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- OVERLAY REGISTER -->
+@if (showRegister()) {
+<div class="overlay" (click)="openLogin()">
+    <div class="overlay-panel" (click)="$event.stopPropagation()">
+        <button class="close-btn" type="button" (click)="openLogin()" aria-label="Close">
+            ✕
+        </button>
+
+        <app-registerform (goToLogin)="openLogin()" />
+    </div>
+</div>
+}
+
+@if (showLogin()) {
+<div class="overlay" (click)="closeLogin()">
+    <div class="overlay-panel" (click)="$event.stopPropagation()">
+        <button class="close-btn" type="button" (click)="closeLogin()">✕</button>
+        <app-loginform />
+    </div>
+</div>
+}
+
+
+
+
+<!-- FEATURES -->
+<section class="container py-5" id="features">
+    <div class="row g-4">
+        <!-- Shared Calendar -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="feature-card h-100">
+                <img src="/shared-calendar.jpg" alt="Shared calendar" class="feature-icon" />
+                <h5>Shared Calendar</h5>
+                <p>
+                    One single calendar for the whole family.
+                    School, activities and events always in sync.
+                </p>
+            </div>
+        </div>
+
+        <!-- Individual Profiles -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="feature-card h-100">
+                <img src="/individual-profile.jpg" alt="Individual profiles" class="feature-icon" />
+                <h5>Individual Profiles</h5>
+                <p>
+                    Parents, kids and relatives. Each member has their own view and events.
+                </p>
+            </div>
+        </div>
+
+        <!-- Smart Reminders -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="feature-card h-100">
+                <img src="/smart-reminder.jpg" alt="Smart reminders" class="feature-icon" />
+                <h5>Smart Reminders</h5>
+                <p>
+                    Never forget an appointment. Get notified at the right moment.
+                </p>
+            </div>
+        </div>
+
+        <!-- Family Management -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="feature-card h-100">
+                <img src="/family-management.jpg" alt="Family management" class="feature-icon" />
+                <h5>Family Management</h5>
+                <p>
+                    Manage multiple families. Parents, grandparents, and children together.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

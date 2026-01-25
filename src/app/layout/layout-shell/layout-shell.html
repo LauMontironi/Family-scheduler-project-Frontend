@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container py-2">
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" routerLink="/">
+            <span class="brand-dot"></span>
+            Family Schedule
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="nav" class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link" href="#testimonials">Reviews</a></li>
+                <li class="nav-item"><a class="nav-link" href="#cta">Get started</a></li>
+
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-outline-dark rounded-pill px-3" href="#"
+                        (click)="openLogin(); $event.preventDefault()">
+                        Welcome back
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-primary rounded-pill px-3" href="#"
+                        (click)="openRegister(); $event.preventDefault()">
+                        Join the family
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- OVERLAY REGISTER -->
+@if (showRegister()) {
+<div class="overlay" (click)="openLogin()">
+    <div class="overlay-panel" (click)="$event.stopPropagation()">
+        <button class="close-btn" type="button" (click)="openLogin()" aria-label="Close">✕</button>
+        <app-registerform />
+    </div>
+</div>
+}
+
+<main class="bg-soft">
+    <router-outlet></router-outlet>
+</main>

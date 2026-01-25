@@ -1,0 +1,35 @@
+.bg-soft {
+    background: #f6f8fb;
+    min-height: calc(100vh - 120px);
+}
+
+.brand-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #0ea5e9;
+    display: inline-block;
+    box-shadow: 0 10px 24px rgba(14, 165, 233, .25);
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 5000;
+}
+
+.overlay-panel {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    border-radius: 1.5rem;
+    background: #fff;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+    padding: 1.25rem;
+}
