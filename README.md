@@ -1,89 +1,95 @@
-# Family Scheduler — Frontend (Angular)
+# 👨‍👩‍👧‍👦 Family Scheduler — Frontend (Angular)
 
-Frontend del proyecto **Family Scheduler**, construido con **Angular (standalone + signals)**.
-Incluye landing page y formularios de **registro** y **login** conectados a un backend FastAPI.
+Frontend del proyecto **Family Scheduler**, desarrollado con **Angular moderno (standalone components + signals)**.
+
+La aplicación ofrece una **landing page** y formularios de **registro** y **login**, conectados a un backend desarrollado en **FastAPI**.
 
 ---
 
-## ✅ Requisitos
+## 📋 Requisitos
 
-- Node.js (LTS recomendado)
-- Angular CLI (opcional, pero útil)
+Antes de empezar, asegúrate de tener instalado:
 
-Comprueba versiones:
+- Node.js (versión LTS recomendada): https://nodejs.org/
+- Angular CLI (opcional, pero recomendable)
+
+Comprueba las versiones instaladas:
 
 ```bash
 node -v
 npm -v
 🚀 Instalación
+Instala las dependencias del proyecto:
+
 npm install
 ▶️ Ejecutar en local
-ng serve
-Abre:
+Inicia el servidor de desarrollo:
 
+ng serve
+La aplicación estará disponible en:
 http://localhost:4200
 
 🔌 Conexión con el Backend
-Este frontend consume endpoints del backend FastAPI como:
+Este frontend consume un backend REST construido con FastAPI.
 
+Endpoints principales
 POST /auth/register
 
 POST /auth/login
 
-Backend local
-Por defecto (si lo tienes corriendo en tu PC):
-
+Backend en local
 http://localhost:8000
 
 Backend en producción (Render)
-Ejemplo:
-
 https://family-scheduler-project-backend.onrender.com
 
-Importante: si el backend en Render devuelve errores 500, normalmente es por configuración de base de datos en producción.
+Nota:
+Si el backend en Render devuelve errores 500, normalmente se debe a que la base de datos no está configurada en producción (siguiente fase del proyecto).
 
-⚙️ Configuración de API URL (recomendado)
-Para no hardcodear URLs, usa environment.
+⚙️ Configuración de la URL del API
+Para evitar URLs hardcodeadas, se usan environment files.
 
-📁 src/environments/environment.ts
+Desarrollo
+Archivo: src/environments/environment.ts
 
 export const environment = {
   apiUrl: 'http://localhost:8000',
 };
-📁 src/environments/environment.prod.ts
+Producción
+Archivo: src/environments/environment.prod.ts
 
 export const environment = {
   apiUrl: 'https://family-scheduler-project-backend.onrender.com',
 };
-Y en tu código:
-
-this.http.post(`${environment.apiUrl}/auth/register`, payload)
+Uso en el código
+this.http.post(`${environment.apiUrl}/auth/register`, payload);
 🌍 Deploy en Netlify
-Build settings (Netlify)
-Build command
+El frontend está preparado para desplegarse como SPA (Single Page Application) en Netlify.
 
-ng build
-Publish directory
-Normalmente será una de estas:
+Build settings
+Build command:
 
-dist/<nombre-proyecto>/browser
+npm run build
+Publish directory:
 
-dist/<nombre-proyecto>
+dist/family-scheduler-front/browser
+(La carpeta exacta depende del nombre del proyecto generado por Angular)
 
-Si no estás segura, después de ng build mira la carpeta dist/.
+🔁 Redirects para SPA (IMPORTANTE)
+Para evitar errores 404 al recargar rutas de Angular, se necesita un redirect.
 
-🔁 Netlify SPA Redirect (IMPORTANTE)
-Si usas rutas de Angular (routerLink), necesitas un redirect para que Netlify no rompa al recargar.
+Crea el archivo netlify.toml en la raíz del proyecto:
 
-Crea el archivo:
+[build]
+  command = "npm run build"
+  publish = "dist/family-scheduler-front/browser"
 
-📁 src/_redirects
-
-/*    /index.html   200
-Asegúrate de que ese archivo se copie al build (si no lo hace, lo movemos a public/ o ajustamos configuración según tu setup).
-
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 🧪 Formularios
-Register
+Registro (Register)
 Campos:
 
 full_name
@@ -92,9 +98,8 @@ email
 
 password
 
-Envía POST a:
-
-/auth/register
+Endpoint:
+POST /auth/register
 
 Login
 Campos:
@@ -103,13 +108,12 @@ email
 
 password
 
-Envía POST a:
+Endpoint:
+POST /auth/login
 
-/auth/login
+La validación avanzada (emails reales, reglas de seguridad, etc.) se implementará en fases posteriores.
 
-La validación completa (email real, reglas de password, etc.) se implementará más adelante.
-
-🛠️ Tech Stack
+🛠️ Tecnologías utilizadas
 Angular (standalone components)
 
 Signals
@@ -118,13 +122,18 @@ Reactive Forms
 
 Bootstrap (UI)
 
-📌 Notas
+Netlify (deploy frontend)
+
+📌 Notas importantes
 En producción, el backend debe permitir CORS desde la URL de Netlify.
 
-En plan free de Render, el backend puede tardar en "despertar" la primera vez.
+En el plan gratuito de Render, el backend puede tardar unos segundos en “despertar” tras un periodo de inactividad.
 
-📷 Demo
-Frontend (Netlify): https://family-scheduler-front.netlify.app/
+🔗 Demo
+
+Frontend (Netlify): https://family-scheduler-front.netlify.app
 
 Backend (Render): https://family-scheduler-project-backend.onrender.com
+
+
 ```
