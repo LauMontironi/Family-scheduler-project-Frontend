@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LayoutShell } from './layout/layout-shell/layout-shell';
 import { Landing } from './pages/landing/landing';
+import { WelcomePage } from './pages/welcome/welcome';
 
 export const routes: Routes = [
   {
@@ -8,11 +9,11 @@ export const routes: Routes = [
     component: LayoutShell,
     children: [
       { path: '', component: Landing },
-      // luego:
-      // { path: 'login', component: Login },
-      // { path: 'register', component: Register },
-      // { path: 'families', component: Families },
+      { path: 'welcome', component: WelcomePage },
+
+      // más adelante
+      // { path: 'families', component: FamiliesListPage },
+      // { path: 'families/create', component: FamilyCreatePage },
     ],
   },
- 
 ];

@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-loginform',
@@ -10,6 +11,9 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './login.css',
 })
 export class Loginform {
+  // ✅ backend en producción (Render)
+  private readonly API = 'https://family-scheduler-project-backend.onrender.com';
+
   message = '';
   loading = false;
 
@@ -26,10 +30,10 @@ export class Loginform {
     }),
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   pulsarVerPassword() {
-    this.inputType.update(val => (val === 'password' ? 'text' : 'password'));
+    this.inputType.update((val) => (val === 'password' ? 'text' : 'password'));
   }
 
   submit() {
@@ -44,18 +48,19 @@ export class Loginform {
     this.loading = true;
     const payload = this.form.getRawValue();
 
-    this.http.post('http://localhost:8000/auth/login', payload).subscribe({
-      next: (res) => {
+    this.http.post(`${this.API}/auth/login`, payload).subscribe({
+      next: (res: any) => {
         console.log('LOGIN OK:', res);
         this.loading = false;
 
-        const goInside = window.confirm(
-          'Login correcto ✅\n\n¿Quieres entrar ahora?'
-        );
+        // ✅ guardo sesión (tu backend devuelve "Token" con mayúscula)
+        if (res?.Token) localStorage.setItem('token', res.Token);
+        if (res?.user?.full_name) localStorage.setItem('full_name', res.user.full_name);
+
+        const goInside = window.confirm('Login correcto ✅\n\n¿Quieres entrar ahora?');
 
         if (goInside) {
-          console.log('Entrar (luego navegas a dashboard)');
-          // Luego aquí haces router.navigate(['/dashboard']) o lo que toque
+          this.router.navigateByUrl('/welcome');
         }
       },
       error: (err) => {

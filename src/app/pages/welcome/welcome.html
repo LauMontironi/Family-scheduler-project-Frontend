@@ -1,0 +1,36 @@
+<section class="welcome-wrap">
+    <div class="welcome-card">
+        <div class="welcome-header">
+            <div class="badge-pill">👋 Welcome</div>
+
+            <!-- Aquí luego lo conectas a tu user del backend -->
+            <h1 class="title">
+                Bienvenido, <span class="name">{{ fullName }}</span>
+            </h1>
+
+            <p class="subtitle">
+                Vamos a preparar tu espacio familiar para empezar a crear eventos y recordatorios.
+            </p>
+        </div>
+
+        <div class="actions">
+            <button class="btn-primary" type="button" (click)="goCreateFamily()">
+                <span class="icon">＋</span>
+                Crear familia
+            </button>
+
+            <button class="btn-secondary" type="button" (click)="goMyFamilies()">
+                <span class="icon">👨‍👨‍👧‍👧</span>
+                Entrar a mi familia
+            </button>
+        </div>
+
+        <div class="hint">
+            <p class="hint-title">¿Primera vez aquí?</p>
+            <p class="hint-text">
+                Te recomendamos crear una familia y luego añadir miembros e hijos. En 2 minutos estás lista.
+            </p>
+        </div>
+    </div>
+</section>
+
