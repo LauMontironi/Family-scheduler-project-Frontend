@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrl: './welcome.css',
 })
 export class WelcomePage {
-  
+
   fullName = localStorage.getItem('full_name') ?? 'Usuario';
 
   private router = inject(Router);
@@ -18,6 +18,6 @@ export class WelcomePage {
   }
 
   goMyFamilies() {
-    this.router.navigateByUrl('/families');
+    this.router.navigateByUrl('/family');
   }
 }

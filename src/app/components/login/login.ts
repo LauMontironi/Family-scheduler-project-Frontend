@@ -53,7 +53,7 @@ export class Loginform {
         console.log('LOGIN OK:', res);
         this.loading = false;
 
-        // ✅ guardo sesión (tu backend devuelve "Token" con mayúscula)
+      
         if (res?.Token) localStorage.setItem('token', res.Token);
         if (res?.user?.full_name) localStorage.setItem('full_name', res.user.full_name);
 

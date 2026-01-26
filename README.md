@@ -1,139 +1,160 @@
-# 👨‍👩‍👧‍👦 Family Scheduler — Frontend (Angular)
+👨‍👩‍👧‍👦 Family Scheduler — Frontend (Angular)
 
-Frontend del proyecto **Family Scheduler**, desarrollado con **Angular moderno (standalone components + signals)**.
+Frontend del proyecto Family Scheduler, desarrollado con Angular.
+La aplicación permite a las familias gestionar eventos, hijos y miembros, con sistema de registro y login, conectado a un backend en FastAPI.
 
-La aplicación ofrece una **landing page** y formularios de **registro** y **login**, conectados a un backend desarrollado en **FastAPI**.
-
----
-
-## 📋 Requisitos
+📋 Requisitos
 
 Antes de empezar, asegúrate de tener instalado:
 
-- Node.js (versión LTS recomendada): https://nodejs.org/
-- Angular CLI (opcional, pero recomendable)
+Node.js (versión LTS recomendada) → https://nodejs.org/
 
-Comprueba las versiones instaladas:
+Angular CLI (opcional pero recomendado)
 
-```bash
+Comprobar versiones:
+
 node -v
 npm -v
+
 🚀 Instalación
-Instala las dependencias del proyecto:
+
+Instala las dependencias:
 
 npm install
-▶️ Ejecutar en local
-Inicia el servidor de desarrollo:
 
+▶️ Ejecutar en local
 ng serve
-La aplicación estará disponible en:
-http://localhost:4200
+
+Abrir en el navegador:
+👉 http://localhost:4200
 
 🔌 Conexión con el Backend
-Este frontend consume un backend REST construido con FastAPI.
+
+Este frontend consume una API REST construida con FastAPI.
 
 Endpoints principales
-POST /auth/register
-
-POST /auth/login
-
+Método Endpoint Descripción
+POST /auth/register Registro de usuario
+POST /auth/login Login de usuario
+GET /families Familias del usuario logueado
+GET /families/{id}/children Hijos de la familia
+GET /families/{id}/events Eventos de la familia
 Backend en local
 http://localhost:8000
 
 Backend en producción (Render)
 https://family-scheduler-project-backend.onrender.com
 
-Nota:
-Si el backend en Render devuelve errores 500, normalmente se debe a que la base de datos no está configurada en producción (siguiente fase del proyecto).
+⚠️ En el plan gratuito de Render el backend puede tardar unos segundos en “despertar”.
 
 ⚙️ Configuración de la URL del API
-Para evitar URLs hardcodeadas, se usan environment files.
+
+Se usan environment files para evitar URLs hardcodeadas.
 
 Desarrollo
-Archivo: src/environments/environment.ts
+
+src/environments/environment.ts
 
 export const environment = {
-  apiUrl: 'http://localhost:8000',
+apiUrl: 'http://localhost:8000',
 };
+
 Producción
-Archivo: src/environments/environment.prod.ts
+
+src/environments/environment.prod.ts
 
 export const environment = {
-  apiUrl: 'https://family-scheduler-project-backend.onrender.com',
+apiUrl: 'https://family-scheduler-project-backend.onrender.com',
 };
-Uso en el código
-this.http.post(`${environment.apiUrl}/auth/register`, payload);
+
+Uso en servicios:
+
+this.http.post(`${environment.apiUrl}/auth/login`, payload);
+
 🌍 Deploy en Netlify
-El frontend está preparado para desplegarse como SPA (Single Page Application) en Netlify.
+
+El frontend está preparado para desplegarse como SPA en Netlify.
 
 Build settings
-Build command:
-
-npm run build
-Publish directory:
-
-dist/family-scheduler-front/browser
-(La carpeta exacta depende del nombre del proyecto generado por Angular)
-
+Opción Valor
+Build command npm run build
+Publish directory dist/family-scheduler-front/browser
 🔁 Redirects para SPA (IMPORTANTE)
-Para evitar errores 404 al recargar rutas de Angular, se necesita un redirect.
 
-Crea el archivo netlify.toml en la raíz del proyecto:
+Crear netlify.toml en la raíz:
 
 [build]
-  command = "npm run build"
-  publish = "dist/family-scheduler-front/browser"
+command = "npm run build"
+publish = "dist/family-scheduler-front/browser"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-🧪 Formularios
-Registro (Register)
-Campos:
+from = "/\*"
+to = "/index.html"
+status = 200
 
-full_name
+🧪 Funcionalidades actuales
 
-email
+Registro y login de usuarios
 
-password
+Dashboard familiar
 
-Endpoint:
-POST /auth/register
+Listado de miembros de la familia
 
-Login
-Campos:
+Listado de hijos
 
-email
+Listado de eventos familiares
 
-password
+Diferenciación visual de eventos por tipo
 
-Endpoint:
-POST /auth/login
+👥 Usuarios de prueba
 
-La validación avanzada (emails reales, reglas de seguridad, etc.) se implementará en fases posteriores.
+Puedes usar estas cuentas para probar la app:
+
+Password para todos: Demo1234!
+
+| Nombre        | Email                                     | ID  | Familia |
+| ------------- | ----------------------------------------- | --- | ------- |
+| Ana Rivera    | [ana@demo.com](mailto:ana@demo.com)       | 11  | Rivera  |
+| Carlos Rivera | [carlos@demo.com](mailto:carlos@demo.com) | 12  | Rivera  |
+| Mei Chen      | [mei@demo.com](mailto:mei@demo.com)       | 13  | Chen    |
+| Liam Chen     | [liam@demo.com](mailto:liam@demo.com)     | 14  | Chen    |
+| Sofía Novak   | [sofia@demo.com](mailto:sofia@demo.com)   | 15  | Novak   |
+| Marko Novak   | [marko@demo.com](mailto:marko@demo.com)   | 16  | Novak   |
+| Laura García  | [laura@demo.com](mailto:laura@demo.com)   | 17  | García  |
+| Diego García  | [diego@demo.com](mailto:diego@demo.com)   | 18  | García  |
+| Amina Okoye   | [amina@demo.com](mailto:amina@demo.com)   | 19  | Okoye   |
+| Sam Okoye     | [sam@demo.com](mailto:sam@demo.com)       | 20  | Okoye   |
+
+Cada usuario solo ve su propia familia, hijos y eventos asociados.
 
 🛠️ Tecnologías utilizadas
-Angular (standalone components)
 
-Signals
+Angular (Standalone Components)
+
+Angular Signals
 
 Reactive Forms
 
-Bootstrap (UI)
+Bootstrap
 
-Netlify (deploy frontend)
+Netlify (frontend hosting)
+
+Render (backend hosting)
 
 📌 Notas importantes
-En producción, el backend debe permitir CORS desde la URL de Netlify.
 
-En el plan gratuito de Render, el backend puede tardar unos segundos en “despertar” tras un periodo de inactividad.
+El backend debe permitir CORS desde la URL de Netlify
+
+El frontend usa JWT para autenticación
+
+Las imágenes de avatar se gestionan en el frontend, no en la base de datos
+
+Los datos de ejemplo están cargados para mostrar la app en funcionamiento
 
 🔗 Demo
 
-Frontend (Netlify): https://family-scheduler-front.netlify.app
+Frontend (Netlify)
+https://family-scheduler-front.netlify.app
 
-Backend (Render): https://family-scheduler-project-backend.onrender.com
-
-
-```
+Backend (Render)
+https://family-scheduler-project-backend.onrender.com
