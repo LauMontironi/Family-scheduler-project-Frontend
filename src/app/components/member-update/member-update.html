@@ -1,0 +1,19 @@
+<div class="wrap">
+    <div class="card">
+        <h2>Update miembro</h2>
+        <p class="muted">ID: {{ memberId }}</p>
+
+        <div class="form">
+            <input type="text" placeholder="Nombre completo" [(ngModel)]="form.full_name">
+            <input type="text" placeholder="Parentesco (mother/father/...)" [(ngModel)]="form.relationship">
+            <input type="text" placeholder="Ciudad" [(ngModel)]="form.city">
+            <input type="text" placeholder="Género (female/male)" [(ngModel)]="form.gender">
+            <textarea placeholder="Hobbys" [(ngModel)]="form.hobbys"></textarea>
+        </div>
+
+        <div class="actions">
+            <button class="btn dark" type="button" (click)="save()">Guardar</button>
+            <button class="btn" type="button" (click)="cancel()">Cancelar</button>
+        </div>
+    </div>
+</div>

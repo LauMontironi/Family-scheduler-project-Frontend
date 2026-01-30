@@ -1,0 +1,104 @@
+<div class="container">
+    <div class="layout">
+
+        <section class="preview">
+            <h2>Live Preview</h2>
+
+            <div class="card preview-card">
+                <div style="display:flex; gap:14px; align-items:center; margin-bottom: 12px;">
+                    <img [src]="getPreviewAvatar()" alt="avatar"
+                        style="width:72px;height:72px;border-radius:18px;border:3px solid #111;object-fit:cover;" />
+                    <div>
+                        <h3 class="title" style="margin:0;">{{ NewCard.full_name || 'Nombre...' }}</h3>
+                        <p style="margin:0; font-weight:700; opacity:.8;">
+                            {{ NewCard.is_child ? 'Niño/a' : 'Adulto' }} · {{ NewCard.relationship || 'Parentesco...' }}
+                        </p>
+                    </div>
+                </div>
+
+                <p><b>Cumple:</b> {{ NewCard.birthdate | date:'shortDate' }}</p>
+                <p><b>Ciudad:</b> {{ NewCard.city || '-' }}</p>
+                <p><b>Género:</b> {{ NewCard.gender || '-' }}</p>
+                <p class="desc"><b>Hobbys:</b> {{ NewCard.hobbys || '-' }}</p>
+
+                <span class="badge">Admin: {{ NewCard.is_admin }}</span>
+            </div>
+        </section>
+
+        <section class="form">
+            <h2>Crear miembro</h2>
+
+            <div class="form-group">
+                <input type="text" placeholder="Nombre completo" [(ngModel)]="NewCard.full_name">
+
+                <label>Parentesco</label>
+                <select [(ngModel)]="NewCard.relationship">
+                    <option value="" disabled>Selecciona...</option>
+                    <option value="mother">Madre</option>
+                    <option value="father">Padre</option>
+                    <option value="grandma">Abuela</option>
+                    <option value="grandpa">Abuelo</option>
+                    <option value="aunt">Tía</option>
+                    <option value="uncle">Tío</option>
+                    <option value="child">Hijo/a</option>
+                </select>
+
+                <label>¿Es niño/a?</label>
+                <select [(ngModel)]="NewCard.is_child">
+                    <option [ngValue]="false">No (Adulto)</option>
+                    <option [ngValue]="true">Sí (Niño/a)</option>
+                </select>
+
+                <label>Fecha de nacimiento (opcional)</label>
+                <!-- ✅ el input date trabaja con string, lo convertimos con setBirthdate -->
+                <input type="date" [ngModel]="birthdateInput" (ngModelChange)="setBirthdate($event)">
+
+                <label>Género (si es niño/a, elige uno)</label>
+                <select [(ngModel)]="NewCard.gender">
+                    <option value="" disabled>Selecciona...</option>
+                    <option value="female">Femenino</option>
+                    <option value="male">Masculino</option>
+                </select>
+
+                <input type="text" placeholder="Ciudad (opcional)" [(ngModel)]="NewCard.city">
+                <textarea placeholder="Hobbys (opcional)" [(ngModel)]="NewCard.hobbys"></textarea>
+
+                <label>¿Es admin?</label>
+                <select [(ngModel)]="NewCard.is_admin">
+                    <option [ngValue]="false">No</option>
+                    <option [ngValue]="true">Sí</option>
+                </select>
+
+                <button class="btn-generate" (click)="generateCard()">Vista previa</button>
+            </div>
+        </section>
+    </div>
+
+    <hr>
+
+    <section class="list-container">
+        <h2>Miembros a añadir</h2>
+
+        <div class="task-grid">
+            @for(card of cards(); track $index; let par = $even; let impar = $odd) {
+            <article class="card task-card" [class.bg-even]="par" [class.bg-odd]="impar">
+                <div class="card-header">
+                    <span>#{{ $index + 1 }}</span>
+                    <h3>{{ card.full_name }}</h3>
+                </div>
+
+                <p>{{ card.relationship }}</p>
+                <p>Child: {{ card.is_child }}</p>
+                <p>Género: {{ card.gender || '-' }}</p>
+
+                <div class="actions">
+                    <button class="btn-generate" (click)="addMember(card)">Añadir</button>
+                    <button class="btn-delete" (click)="removeCard($index)">Eliminar</button>
+                </div>
+            </article>
+            } @empty {
+            <p class="empty-text">Aún no hay miembros en la lista.</p>
+            }
+        </div>
+    </section>
+</div>

@@ -1,0 +1,62 @@
+<section class="page">
+    <header class="page-header">
+        <div class="headline">
+            <span class="chip">📅 Events Dashboard</span>
+            <h1 class="title">Eventos por familiar</h1>
+            <p class="subtitle">Cada miembro con sus eventos (ordenados por fecha).</p>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn ghost" (click)="back()">← Volver</button>
+            <button class="btn primary" (click)="toggleCreate()">
+                {{ showCreate() ? '✕ Cerrar' : '+ Crear Evento' }}
+            </button>
+        </div>
+    </header>
+
+    @if (showCreate()) {
+    <app-event-create [members]="members()" (eventCreated)="handleEventCreated($event)">
+    </app-event-create>
+    }
+
+    <section class="panel">
+        <div class="grid-members">
+            @for (m of members(); track $index) {
+            <article class="member-card">
+                <div class="member-head">
+                    <div class="avatar">{{ m.full_name?.slice(0,1) || '👤' }}</div>
+                    <div class="meta">
+                        <h3 class="member-name">{{ m.full_name }}</h3>
+                        <span class="member-role">{{ m.relationship || (m.is_child ? 'child' : 'member') }}</span>
+                    </div>
+                </div>
+
+                <div class="events-grid">
+                    @for (ev of eventsForMember(m.id); track $index; let par = $even; let impar = $odd) {
+                    <div class="event-card" [class.even]="par" [class.odd]="impar">
+                        <div class="event-top">
+                            <span class="event-icon">{{ getIconByType(ev.type) }}</span>
+                            <strong class="event-title">{{ ev.title }}</strong>
+                        </div>
+
+                        <p class="event-time">
+                            {{ ev.start_at }} → {{ ev.end_at }}
+                        </p>
+
+                        @if (ev.location) {
+                        <p class="event-muted">📍 {{ ev.location }}</p>
+                        }
+
+                        <div class="event-actions">
+                            <button class="mini-btn danger" (click)="deleteEvent(ev)">Eliminar</button>
+                        </div>
+                    </div>
+                    } @empty {
+                    <p class="empty">Sin eventos aún</p>
+                    }
+                </div>
+            </article>
+            }
+        </div>
+    </section>
+</section>

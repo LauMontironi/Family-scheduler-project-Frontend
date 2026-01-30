@@ -23,3 +23,11 @@
 .toggle-password:hover {
     opacity: 0.8;
 }
+
+.ng-invalid.ng-touched {
+    border-color: lightcoral;
+}
+
+.ng-valid.ng-untouched {
+    border-color: lightgreen;
+}

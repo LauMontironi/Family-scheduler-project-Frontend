@@ -1,95 +1,125 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { FamilyDataApi } from '../../services/family-data.api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-family-home',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './family-home.html',
   styleUrl: './family-home.css',
 })
 export class FamilyHome implements OnInit {
-  // ✅ API
+  private api = inject(FamilyDataApi);
+  private router = inject(Router);
+
   familyMembers = signal<any[]>([]);
   children = signal<any[]>([]);
   events = signal<any[]>([]);
 
-  private api = inject(FamilyDataApi);
+  familyId = signal<number | null>(null);
+
+  // ✅ modal / detalle
+  selectedMember = signal<any | null>(null);
+
+  readonly AVATAR_MAP: Record<string, string> = {
+    mother: '/madre.jpg', madre: '/madre.jpg',
+    father: '/padre.jpg', padre: '/padre.jpg',
+    grandma: '/abuela.jpg', abuela: '/abuela.jpg',
+    grandpa: '/abuelo.jpg', abuelo: '/abuelo.jpg',
+    uncle: '/tio.jpg', tio: '/tio.jpg',
+    aunt: '/tia.jpg', tia: '/tia.jpg',
+    default: '/default.jpg',
+  };
 
   ngOnInit(): void {
+    this.loadDashboard();
+  }
+
+  loadDashboard() {
     this.api.getMyFamilies().subscribe({
       next: (families) => {
-        if (!families?.length) return;
+        if (families && families.length > 0) {
+          const id = families[0].family_id || families[0].id;
+          this.familyId.set(id);
 
-        const familyId = families[0].family_id;
+          // ✅ Si tu backend mezcla niños/adultos, igual los separamos en frontend
+          this.api.getMembersByFamily(id).subscribe(m => {
+            this.familyMembers.set(m);
+            // si tu endpoint children a veces falla o duplica, usamos filtro:
+            this.children.set(m.filter((x: any) => !!x.is_child));
+          });
 
-        // ✅ members
-        this.api.getMembersByFamily(familyId).subscribe({
-          next: (members) => this.familyMembers.set(members),
-          error: (err) => console.error('members error', err),
-        });
-
-        // ✅ children
-        this.api.getChildrenByFamily(familyId).subscribe({
-          next: (kids) => this.children.set(kids),
-          error: (err) => console.error('children error', err),
-        });
-
-        // ✅ events  (IMPORTANTE: aquí dentro, usando familyId)
-        this.api.getEventsByFamily(familyId).subscribe({
-          next: (evts) => {
-            console.log('EVENTS ->', evts);
-            this.events.set(evts);
-          },
-          error: (err) => console.error('events error', err),
-        });
+          this.api.getEventsByFamily(id).subscribe(e => this.events.set(e));
+        } else {
+          this.router.navigateByUrl('/welcome');
+        }
       },
-      error: (err) => console.error('families/my error', err),
+      error: (err) => console.error('Error al obtener familias:', err)
     });
   }
 
-  // ✅ NO TOCO tus funciones
-  getAvatarByRole(role: any) {
-    const r = String(role ?? '').toLowerCase().trim();
-
-    if (r === 'mother' || r === 'madre') return '/madre.jpg';
-    if (r === 'father' || r === 'padre') return '/padre.jpg';
-    if (r === 'grandma' || r === 'abuela') return '/abuela.jpg';
-    if (r === 'grandpa' || r === 'abuelo') return '/abuelo.jpg';
-    if (r === 'aunt' || r === 'tía' || r === 'tia') return '/tia.jpg';
-    if (r === 'uncle' || r === 'tío' || r === 'tio') return '/tio.jpg';
-
-    return '/default.jpg';
+  // ✅ lista adultos filtrada (por si el backend mete children aquí)
+  adultsList() {
+    return this.familyMembers().filter((m: any) => !m.is_child);
   }
 
-  getIconByType(type: any) {
-    switch (type) {
-      case 'activity': return 'Extraescolar ⚽🎾🏊💃🏼';
-      case 'medical': return 'Doctor 🩺👩🏼‍⚕️';
-      case 'birthday': return 'Cumple 🎂';
-      case 'reminder': return 'No olvidar 🔔';
-      case 'school': return 'Cole 🎒';
-      default: return '⁉️';
+  goAddMember() {
+    const id = this.familyId();
+    if (!id) {
+      alert('No hay familyId todavía.');
+      return;
     }
+    this.router.navigate(['/member-create'], { queryParams: { familyId: id } });
   }
 
-  getEventColorClass(type: string): string {
-    switch (type) {
-      case 'birthday': return 'event-birthday';
-      case 'medical': return 'event-medical';
-      case 'school': return 'event-school';
-      case 'activity': return 'event-activity';
-      case 'reminder': return 'event-reminder';
-      default: return 'event-default';
-    }
+  // ✅ abrir modal
+  openMember(m: any) {
+    this.selectedMember.set(m);
+  }
+
+  closeMember() {
+    this.selectedMember.set(null);
+  }
+
+  // ✅ ir a update (simple)
+goUpdateMember(m: any) {
+  const memberId = m?.id;
+  this.router.navigate(['/member-update'], { queryParams: { memberId } });
+}
+
+  goEvents() {
+    const id = this.familyId();
+    if (!id) {
+      alert('No hay familyID todavia')
+      return;
+
+    }this.router.navigate(['events'], {queryParams: {familyId:id}})
+  }
+  
+  getAvatarByRole(role: string) {
+    const r = (role || '').toLowerCase().trim() || 'default';
+    return this.AVATAR_MAP[r] || this.AVATAR_MAP['default'];
   }
 
   getAvatarForChild(child: any) {
-    const g = String(child?.gender ?? child?.sexo ?? '').toLowerCase().trim();
-
-    if (g === 'female' || g === 'femenino') return '/nina.jpg';
-    if (g === 'male' || g === 'masculino') return '/nino.jpg';
-
-    return '/child-default.jpg';
+    const g = String(child?.gender || '').toLowerCase().trim();
+    return (g === 'female' || g === 'femenino') ? '/nina.jpg' : '/nino.jpg';
   }
+
+  avatarForMember(m: any) {
+    if (m?.is_child) return this.getAvatarForChild(m);
+    return this.getAvatarByRole(m?.relationship);
+  }
+
+  
+
 }
+
+   
+
+
+
+

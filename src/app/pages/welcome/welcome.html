@@ -1,36 +1,40 @@
 <section class="welcome-wrap">
     <div class="welcome-card">
-        <div class="welcome-header">
-            <div class="badge-pill">👋 Welcome</div>
+        <div class="welcome-content">
+            <div class="badge-pill">✨ Family Scheduler Pro</div>
 
-            <!-- Aquí luego lo conectas a tu user del backend -->
-            <h1 class="title">
-                Bienvenido, <span class="name">{{ fullName }}</span>
+            <h1 class="main-title">
+                Hola, <span class="name">{{ fullName }}</span>
             </h1>
 
-            <p class="subtitle">
-                Vamos a preparar tu espacio familiar para empezar a crear eventos y recordatorios.
+            <p class="main-subtitle">
+                Gestiona el día a día de tu familia de forma inteligente.
+                Todo lo que necesitas en un solo lugar.
             </p>
-        </div>
 
-        <div class="actions">
-            <button class="btn-primary" type="button" (click)="goCreateFamily()">
-                <span class="icon">＋</span>
-                Crear familia
-            </button>
+            <div class="feature-container">
+                <span class="tag">📅 Agenda</span>
+                <span class="tag">👨‍👩‍👧 Miembros</span>
+                <span class="tag">✅ Tareas</span>
+            </div>
 
-            <button class="btn-secondary" type="button" (click)="goMyFamilies()">
-                <span class="icon">👨‍👨‍👧‍👧</span>
-                Entrar a mi familia
-            </button>
-        </div>
 
-        <div class="hint">
-            <p class="hint-title">¿Primera vez aquí?</p>
-            <p class="hint-text">
-                Te recomendamos crear una familia y luego añadir miembros e hijos. En 2 minutos estás lista.
-            </p>
+            <!-- Entrar dashboard -->
+            <div class="action-area">
+                <button class="btn-main" (click)="goMyFamilies()">
+                    <span>Entrar al Dashboard</span>
+                    <i class="icon-arrow">→</i>
+                </button>
+            </div>
+
+            <div class="action-area" style="margin-top:20px;">
+                <input type="text" placeholder="Familia - Apellido" [(ngModel)]="familyName"
+                    style="padding:12px;border-radius:12px;border:1px solid #ccc;width:100%;margin-bottom:10px;" />
+            
+                <button class="btn-main" (click)="createFamily()">
+                    Crear Familia
+                </button>
+            </div>
         </div>
     </div>
 </section>
-

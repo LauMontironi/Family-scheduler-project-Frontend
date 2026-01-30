@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
   styleUrl: './login.css',
 })
 export class Loginform {
-  // ✅ backend en producción (Render)
   private readonly API = 'https://family-scheduler-project-backend.onrender.com';
 
   message = '';
@@ -22,7 +21,10 @@ export class Loginform {
   form = new FormGroup({
     email: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.email],
+      validators: [
+        Validators.required,
+        Validators.pattern(/^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/),
+      ],
     }),
     password: new FormControl('', {
       nonNullable: true,
@@ -46,22 +48,39 @@ export class Loginform {
     }
 
     this.loading = true;
-    const payload = this.form.getRawValue();
+
+    // ✅ payload limpio (sin espacios)
+    const payload = {
+      email: (this.form.value.email ?? '').trim(),
+      password: (this.form.value.password ?? '').trim(),
+    };
+
+    console.log('PAYLOAD LOGIN:', payload);
 
     this.http.post(`${this.API}/auth/login`, payload).subscribe({
       next: (res: any) => {
         console.log('LOGIN OK:', res);
         this.loading = false;
 
-      
-        if (res?.Token) localStorage.setItem('token', res.Token);
-        if (res?.user?.full_name) localStorage.setItem('full_name', res.user.full_name);
+        // ✅ TU BACKEND DEVUELVE "Token" (MAYÚSCULA)
+        const token = res?.Token;
 
-        const goInside = window.confirm('Login correcto ✅\n\n¿Quieres entrar ahora?');
-
-        if (goInside) {
-          this.router.navigateByUrl('/welcome');
+        if (!token) {
+          console.error('NO LLEGÓ Token EN LA RESPUESTA');
+          this.message = 'Error: no llegó el token del backend.';
+          return;
         }
+
+        // ✅ guardar token y nombre
+        localStorage.setItem('access_token', token);
+
+        const fullName = res?.user?.full_name ?? 'Usuario';
+        localStorage.setItem('full_name', fullName);
+
+        console.log('TOKEN GUARDADO:', localStorage.getItem('access_token'));
+
+        // ✅ entrar
+        this.router.navigateByUrl('/welcome');
       },
       error: (err) => {
         console.log('LOGIN ERROR:', err);

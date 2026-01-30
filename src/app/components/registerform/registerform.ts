@@ -19,12 +19,22 @@ export class Registerform {
   message = '';
   loading = false;
   inputType = signal<string>('password');
+  
+passwordsMatch(form: FormGroup) {
+  const p1 = form.get('password')?.value;
+  const p2 = form.get('password_repeat')?.value;
+  return p1 === p2 ? null : { passwordMismatch: true };
+}
 
   form = new FormGroup({
     full_name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/)] }),
+
     password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(6)] }),
-  });
+
+    password_repeat: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(6),] }),    
+  }, { validators: (form) => this.passwordsMatch(form as FormGroup) });
 
   constructor(private http: HttpClient) {}
 
@@ -40,6 +50,13 @@ export class Registerform {
       this.message = 'Revisa los campos.';
       return;
     }
+
+      // ✅ mismatch 
+  if (this.form.value.password !== this.form.value.password_repeat) {
+    this.form.get('password_repeat')?.setErrors({ passwordMismatch: true });
+    this.form.get('password_repeat')?.markAsTouched();
+    return;
+  }
 
     this.loading = true;
     const payload = this.form.getRawValue();
@@ -67,6 +84,17 @@ export class Registerform {
       },
     });
   }
+
+checkError(fieldName: string, errorName: string) {
+  const control = this.form.get(fieldName);
+  return !!(control && control.touched && control.hasError(errorName));
+  }
+
+  checkPasswords() {
+  if (this.form.value.password !== this.form.value.password_repeat) {
+    this.form.get('password_repeat')?.setErrors({ passwordMismatch: true });
+  }
+}
 
   
 }

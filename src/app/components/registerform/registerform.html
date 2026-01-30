@@ -8,6 +8,11 @@
         <div class="form-group">
             <label for="fullName">Full name</label>
             <input id="fullName" type="text" class="form-control" formControlName="full_name" placeholder="Jane Doe" />
+
+            @if(checkError('full_name','required')){
+
+            <p class="error">El campo nombre es requerido</p>
+            }
         </div>
 
         <!-- Email -->
@@ -15,6 +20,14 @@
             <label for="email">Email</label>
             <input id="email" type="email" class="form-control" formControlName="email"
                 placeholder="email@example.com" />
+            @if(checkError('email','required')){
+            
+            <p class="error">El campo email es requerido</p>
+            }
+            @if(checkError('email','pattern')){
+            
+            <p class="error">El email n tiene la estructura correcta</p>
+            }
         </div>
 
         <!-- Password -->
@@ -24,6 +37,16 @@
             <div class="password-wrapper">
                 <input id="password" [type]="inputType()" class="form-control" formControlName="password"
                     placeholder="••••••••" />
+                 @if(checkError('password','minlength')){
+                    <p class="error">El password tiene que teer un minimo de 6 digitos</p>
+                                }
+
+                <input id="password_repeat" [type]="inputType()" class="form-control" formControlName="password_repeat" placeholder="Repite el password"  (blur)="checkPasswords()"/>
+
+                @if(checkError('password_repeat','passwordMismatch')){
+                
+                <p class="error">Las contraseñas no coinciden</p>
+                }
 
                 <button type="button" class="toggle-password" (click)="pulsarVerPassword()"
                     aria-label="Toggle password visibility">

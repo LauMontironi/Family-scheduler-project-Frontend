@@ -33,3 +33,11 @@
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
     padding: 1.25rem;
 }
+
+.ng-invalid.ng-touched {
+    border-color: lightcoral;
+}
+
+.ng-valid.ng-untouched {
+    border-color: lightgreen;
+}

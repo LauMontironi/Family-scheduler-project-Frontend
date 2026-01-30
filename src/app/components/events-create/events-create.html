@@ -1,0 +1,61 @@
+<div class="panel">
+    <header class="panel-head">
+        <h2 class="panel-title">Crear evento</h2>
+        <p class="panel-subtitle">Elige un familiar y completa los datos.</p>
+    </header>
+
+    <div class="grid">
+        <div class="field">
+            <label class="label">Familiar</label>
+            <select class="input" [(ngModel)]="newEvent.member_id">
+                <option [ngValue]="0" disabled>Selecciona...</option>
+                @for (m of members(); track $index) {
+                <option [ngValue]="m.id">{{ m.full_name }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="field">
+            <label class="label">Tipo</label>
+            <select class="input" [(ngModel)]="newEvent.type">
+                <option value="activity">Activity</option>
+                <option value="medical">Medical</option>
+                <option value="birthday">Birthday</option>
+                <option value="school">School</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label class="label">Título</label>
+            <input class="input" type="text" [(ngModel)]="newEvent.title"
+                placeholder="Ej: Pediatra / Fútbol / Cumpleaños" />
+        </div>
+
+        <div class="field">
+            <label class="label">Inicio</label>
+            <input class="input" type="datetime-local" [(ngModel)]="newEvent.start_at" />
+        </div>
+
+        <div class="field">
+            <label class="label">Fin</label>
+            <input class="input" type="datetime-local" [(ngModel)]="newEvent.end_at" />
+        </div>
+
+        <div class="field">
+            <label class="label">Lugar</label>
+            <input class="input" type="text" [(ngModel)]="newEvent.location" placeholder="Clínica / Colegio / Parque" />
+        </div>
+
+        <div class="field field-full">
+            <label class="label">Notas</label>
+            <textarea class="textarea" rows="3" [(ngModel)]="newEvent.notes"></textarea>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn-primary" type="button" (click)="handleClick()">
+            Crear evento
+        </button>
+    </div>
+</div>
+
