@@ -40,7 +40,9 @@
                         </div>
 
                         <p class="event-time">
-                            {{ ev.start_at }} → {{ ev.end_at }}
+                            {{ ev.start_at | date:"dd MMM   'inicio'    HH:mm" }}
+                            —
+                            {{ ev.end_at | date:"'fin' HH:mm" }}
                         </p>
 
                         @if (ev.location) {

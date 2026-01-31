@@ -7,7 +7,7 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #0ea5e9;
+    background: linear-gradient(90deg, #7c3aed, #6d28d9);
     display: inline-block;
     box-shadow: 0 10px 24px rgba(14, 165, 233, .25);
 }

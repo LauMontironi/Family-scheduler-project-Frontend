@@ -55,6 +55,14 @@ export class FamilyDataApi {
     });
   }
 
+// 5.1) Eventos por miembro
+getEventsByFamilyMember(familyId: number, memberId: number) {
+  return this.http.get<any[]>(
+    `${this.API}/events/families/${familyId}/members/${memberId}/events`,
+    { headers: this.getHeaders() }
+  );
+}
+ 
   // 6) Crear niño
   postChild(data: any) {
     return this.http.post<any>(`${this.API}/children/`, data, {
@@ -84,4 +92,11 @@ export class FamilyDataApi {
     );
 
   }
+
+  getMemberById(memberId: number) {
+  return this.http.get<any>(`${this.API}/fmembers/${memberId}`, {
+    headers: this.getHeaders(),
+  });
+}
+
 }

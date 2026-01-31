@@ -1,6 +1,7 @@
 import { Registerform } from './../../components/registerform/registerform';
-import { Component, signal } from '@angular/core';
-import { RouterOutlet, RouterLink } from '@angular/router';
+import { Component, signal, inject } from '@angular/core';
+import { RouterOutlet, Router, RouterLink, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-layout-shell',
@@ -11,21 +12,28 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 })
 export class LayoutShell {
 
-    showRegister = signal(false);
-  
+  private router = inject(Router);
 
+  showRegister = signal(false);
+  showBackHome = signal(false);
 
+  constructor() {
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe((e) => {
+        this.showBackHome.set(e.urlAfterRedirects !== '/');
+      });
+  }
 
+  goHome() {
+    this.router.navigateByUrl('/');
+  }
 
-openRegister() {
+  openRegister() {
     this.showRegister.set(true);
   }
-  
-  
-  
-  
-openLogin() {
+
+  openLogin() {
     this.showRegister.set(false);
-    // aquí luego muestras login o navegas a /login
   }
 }

@@ -6,6 +6,8 @@ import { FamilyHome } from './pages/family-home/family-home';
 import { MemberCreate } from './components/member-create/member-create';
 import { MemberUpdate } from './components/member-update/member-update';
 import { Events } from './pages/events/events';
+import { SeeCard } from './components/see-card/see-card';
+import { NotFoundPage  } from './components/pages/not-found/not-found';
 
 export const routes: Routes = [
   {
@@ -18,12 +20,10 @@ export const routes: Routes = [
       { path: 'family', component: FamilyHome },
       { path: 'member-create', component: MemberCreate },
       { path: 'member-update', component: MemberUpdate },
+      { path: 'member/:id', component: SeeCard },
       { path: 'events', component: Events },
+      { path: '**', component: NotFoundPage  }
 
-
-      {path:'**', component:Error}
-      // { path: 'families', component: FamiliesPage },
-      // { path: 'families/create', component: FamilyCreatePage },
     ],
   },
 ];

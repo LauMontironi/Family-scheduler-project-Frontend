@@ -86,7 +86,7 @@ export class FamilyHome implements OnInit {
 
   // ✅ ir a update (simple)
 goUpdateMember(m: any) {
-  const memberId = m?.id;
+  const memberId = m?.id ?? m?.member_id;
   this.router.navigate(['/member-update'], { queryParams: { memberId } });
 }
 
@@ -114,7 +114,24 @@ goUpdateMember(m: any) {
     return this.getAvatarByRole(m?.relationship);
   }
 
-  
+  goMemberAgenda(m: any) {
+  const familyId = this.familyId();
+  const memberId = m?.id ?? m?.member_id;
+
+  if (!familyId || !memberId) {
+    alert('Falta familyId o memberId');
+    return;
+  }
+
+  this.router.navigate(['/events'], {
+    queryParams: { familyId, memberId }
+  });
+}
+goSeeCard(m: any) {
+  const memberId = m?.id ?? m?.member_id;
+  if (!memberId) return;
+  this.router.navigate(['/member', memberId]);
+}
 
 }
 

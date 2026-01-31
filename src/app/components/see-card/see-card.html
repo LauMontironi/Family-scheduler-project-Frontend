@@ -1,0 +1,44 @@
+<section class="page">
+    <header class="page-header">
+        <div class="headline">
+            <span class="chip">👤 Member Card</span>
+            <h1 class="title">Ficha del miembro</h1>
+            <p class="subtitle">Detalle completo del integrante.</p>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn ghost" (click)="back()">← Back</button>
+        </div>
+    </header>
+
+    @if (loading()) {
+    <div class="panel">Cargando…</div>
+    } @else {
+    @if (member()) {
+    <section class="panel card-detail">
+        <div class="top">
+            <img class="avatar xl" [src]="avatarForMember(member())" alt="avatar" />
+            <div class="meta">
+                <h2 class="name">{{ member().full_name }}</h2>
+                <div class="pills">
+                    <span class="pill">{{ member().is_child ? 'Niño/a' : 'Adulto' }}</span>
+                    <span class="pill">{{ member().relationship || '-' }}</span>
+                    <span class="pill" *ngIf="member().is_admin">Admin</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div><b>Email:</b> {{ member().email || '-' }}</div>
+            <div><b>Cumple:</b> {{ member().birthdate || '-' }}</div>
+            <div><b>Género:</b> {{ member().gender || '-' }}</div>
+            <div><b>Ciudad:</b> {{ member().city || '-' }}</div>
+            <div class="full"><b>Hobbys:</b> {{ member().hobbys || '-' }}</div>
+        </div>
+    </section>
+    } @else {
+    <div class="panel">No se encontró el miembro.</div>
+    }
+    }
+</section>
+

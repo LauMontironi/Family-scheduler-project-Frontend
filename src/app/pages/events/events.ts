@@ -17,6 +17,7 @@ export class Events implements OnInit {
   private api = inject(FamilyDataApi);
 
   familyId = signal<number | null>(null);
+  memberId = signal<number | null>(null);
 
   members = signal<any[]>([]);
   events = signal<any[]>([]);
@@ -24,26 +25,77 @@ export class Events implements OnInit {
   showCreate = signal(false);
 
   ngOnInit(): void {
-    const id = this.route.snapshot.queryParamMap.get('familyId');
-    const familyId = id ? Number(id) : null;
+    // Escuchamos cambios por si navegas con queryParams diferentes
+    this.route.queryParamMap.subscribe((params) => {
+      const familyIdRaw = params.get('familyId');
+      const memberIdRaw = params.get('memberId');
 
-    if (!familyId) {
-      this.router.navigateByUrl('/family');
-      return;
-    }
+      const familyId = familyIdRaw ? Number(familyIdRaw) : null;
+      const memberId = memberIdRaw ? Number(memberIdRaw) : null;
 
-    this.familyId.set(familyId);
+      if (!familyId) {
+        this.router.navigateByUrl('/family');
+        return;
+      }
 
-    this.api.getMembersByFamily(familyId).subscribe(m => this.members.set(m));
-    this.api.getEventsByFamily(familyId).subscribe(e => this.events.set(e));
+      this.familyId.set(familyId);
+      this.memberId.set(Number.isFinite(memberId as number) ? memberId : null);
+
+      // 1) Cargar miembros y normalizar el ID (a veces viene como id, a veces como member_id)
+      this.api.getMembersByFamily(familyId).subscribe({
+        next: (m) => {
+          const normalized = (m || []).map((x: any) => ({
+            ...x,
+            id: x?.id ?? x?.member_id, // 👈 normalizamos para que el template use siempre m.id
+          }));
+
+          // Si vienes filtrando por miembro, mostramos solo ese miembro
+          if (this.memberId()) {
+            this.members.set(normalized.filter((x: any) => Number(x.id) === Number(this.memberId())));
+          } else {
+            this.members.set(normalized);
+          }
+        },
+        error: (err) => console.error('Error members:', err),
+      });
+
+      // 2) Cargar eventos: por miembro si hay memberId, si no por familia
+      if (this.memberId()) {
+        this.api.getEventsByFamilyMember(familyId, this.memberId()!).subscribe({
+          next: (e) => this.events.set(e),
+          error: (err) => {
+            // Si el backend devuelve 404 cuando no hay eventos, lo tratamos como lista vacía
+            if (err?.status === 404) {
+              this.events.set([]);
+              return;
+            }
+            console.error('Error events by member:', err);
+          },
+        });
+      } else {
+        this.api.getEventsByFamily(familyId).subscribe({
+          next: (e) => this.events.set(e),
+          error: (err) => console.error('Error events by family:', err),
+        });
+      }
+    });
   }
 
   toggleCreate() {
-    this.showCreate.update(v => !v);
+    this.showCreate.update((v) => !v);
   }
 
   back() {
     this.router.navigateByUrl('/family');
+  }
+
+  clearMemberFilter() {
+    const fid = this.familyId();
+    if (!fid) return;
+
+    this.router.navigate(['/events'], {
+      queryParams: { familyId: fid },
+    });
   }
 
   getIconByType(type: string) {
@@ -56,10 +108,14 @@ export class Events implements OnInit {
     return icons[type] || '🔔';
   }
 
+  // Agrupa eventos por miembro (sirve tanto en modo familia como modo miembro)
   eventsForMember(memberId: number) {
     return this.events()
-      .filter((ev: any) => ev.member_id === memberId)
-      .sort((a: any, b: any) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime());
+      .filter((ev: any) => Number(ev.member_id) === Number(memberId))
+      .sort(
+        (a: any, b: any) =>
+          new Date(a.start_at).getTime() - new Date(b.start_at).getTime()
+      );
   }
 
   handleEventCreated(data: any) {
@@ -83,13 +139,30 @@ export class Events implements OnInit {
 
     this.api.createEvent(familyId, memberId, payload).subscribe({
       next: () => {
-        this.api.getEventsByFamily(familyId).subscribe(e => this.events.set(e));
+        // recargar eventos según filtro actual
+        if (this.memberId()) {
+          this.api
+            .getEventsByFamilyMember(familyId, this.memberId()!)
+            .subscribe({
+              next: (e) => this.events.set(e),
+              error: (err) => {
+                if (err?.status === 404) {
+                  this.events.set([]);
+                  return;
+                }
+                console.error('Error events by member:', err);
+              },
+            });
+        } else {
+          this.api.getEventsByFamily(familyId).subscribe((e) => this.events.set(e));
+        }
+
         this.showCreate.set(false);
       },
       error: (err: any) => {
         console.error(err);
         alert('Error al crear evento');
-      }
+      },
     });
   }
 
@@ -107,7 +180,7 @@ export class Events implements OnInit {
       error: (err: any) => {
         console.error(err);
         alert('No se pudo eliminar');
-      }
+      },
     });
   }
 }

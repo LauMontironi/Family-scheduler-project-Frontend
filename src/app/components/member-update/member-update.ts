@@ -33,7 +33,7 @@ export class MemberUpdate {
   // ✅ ESTO lo llama el botón Guardar
   save() {
     console.log('SAVE UPDATE:', this.memberId, this.form);
-    alert('Update listo (pantalla). Luego lo conectamos al backend 🙂');
+    alert('Update listo (pantalla). me falta conectar al backend! 🙂');
     this.router.navigateByUrl('/family');
   }
 

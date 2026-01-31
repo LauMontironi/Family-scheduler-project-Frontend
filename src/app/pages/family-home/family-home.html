@@ -26,7 +26,7 @@
             @for (m of adultsList(); track $index) {
             <article class="card hover-card" (click)="openMember(m)">
                 <div class="card-overlay-actions">
-                    <button class="mini-btn" (click)="$event.stopPropagation(); openMember(m)">Ver</button>
+                    <button class="mini-btn" (click)="$event.stopPropagation(); goSeeCard(m)">Ver</button>
                     <button class="mini-btn dark" (click)="$event.stopPropagation(); goUpdateMember(m)">Update</button>
                 </div>
 
@@ -36,6 +36,9 @@
                         <h3 class="card-title">{{ m.full_name }}</h3>
                         <span class="role-pill">{{ m.relationship }}</span>
                     </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn tiny primary"(click)="goMemberAgenda(m)">Ver Agenda</button>
                 </div>
             </article>
             }
@@ -53,7 +56,7 @@
             @for (c of children(); track $index) {
             <article class="card hover-card" (click)="openMember(c)">
                 <div class="card-overlay-actions">
-                    <button class="mini-btn" (click)="$event.stopPropagation(); openMember(c)">Ver</button>
+                    <button class="mini-btn" (click)="$event.stopPropagation(); goSeeCard(c)">Ver</button>
                     <button class="mini-btn dark" (click)="$event.stopPropagation(); goUpdateMember(c)">Update</button>
                 </div>
 
@@ -66,7 +69,7 @@
                 </div>
 
                 <div class="card-footer">
-                    <button class="btn tiny primary">Ver Agenda</button>
+                    <button class="btn tiny primary"(click)="goMemberAgenda(c)">Ver Agenda</button>
                 </div>
             </article>
             }

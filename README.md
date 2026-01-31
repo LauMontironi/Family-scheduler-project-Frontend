@@ -1,55 +1,102 @@
 👨‍👩‍👧‍👦 Family Scheduler — Frontend (Angular)
 
-Frontend del proyecto Family Scheduler, desarrollado con Angular.
-La aplicación permite a las familias gestionar eventos, hijos y miembros, con sistema de registro y login, conectado a un backend en FastAPI.
+Frontend del proyecto Family Scheduler, una aplicación full-stack para la gestión de familias, miembros y eventos.
+Este repositorio contiene la interfaz desarrollada en Angular, conectada a una API REST construida con FastAPI.
 
-📋 Requisitos
+🎯 Objetivo del Frontend
 
-Antes de empezar, asegúrate de tener instalado:
+Construir una SPA (Single Page Application) capaz de:
 
-Node.js (versión LTS recomendada) → https://nodejs.org/
+Gestionar autenticación de usuarios
 
-Angular CLI (opcional pero recomendado)
+Mostrar información contextual según la familia del usuario logueado
 
-Comprobar versiones:
+Consumir una API protegida mediante JWT
 
-node -v
-npm -v
+Mantener un estado reactivo y escalable
 
-🚀 Instalación
+🏗️ Creación y Arquitectura del Proyecto
 
-Instala las dependencias:
+El proyecto fue creado con Angular y estructurado siguiendo una arquitectura modular y escalable.
 
-npm install
+Se implementó:
 
-▶️ Ejecutar en local
-ng serve
+Componentes standalone para reducir acoplamiento y simplificar la estructura
 
-Abrir en el navegador:
-👉 http://localhost:4200
+Separación por features (auth, families, members, events)
 
-🔌 Conexión con el Backend
+Servicios dedicados para la comunicación con la API
 
-Este frontend consume una API REST construida con FastAPI.
+Manejo de estado reactivo usando Angular Signals
 
-Endpoints principales
-Método Endpoint Descripción
-POST /auth/register Registro de usuario
-POST /auth/login Login de usuario
-GET /families Familias del usuario logueado
-GET /families/{id}/children Hijos de la familia
-GET /families/{id}/events Eventos de la familia
-Backend en local
-http://localhost:8000
+⚙️ Tecnologías y Conceptos Aplicados
+🧩 Framework
 
-Backend en producción (Render)
-https://family-scheduler-project-backend.onrender.com
+Angular
 
-⚠️ En el plan gratuito de Render el backend puede tardar unos segundos en “despertar”.
+TypeScript
 
-⚙️ Configuración de la URL del API
+🔄 Estado y Reactividad
 
-Se usan environment files para evitar URLs hardcodeadas.
+Angular Signals para manejo de estado local reactivo
+
+Comunicación entre componentes con @Input() y @Output()
+
+🧠 Control Flow Moderno
+
+Uso del nuevo control flow introducido en Angular:
+
+@if
+
+@for
+
+@switch
+
+📝 Formularios
+
+FormsModule
+
+Validación de formularios en cliente
+
+Two-way data binding
+
+🌐 Comunicación con Backend
+
+Angular HTTP Client
+
+Consumo de API REST protegida con JWT
+
+Interceptor para adjuntar automáticamente el token en cada request
+
+🧭 Navegación
+
+Angular Router
+
+Rutas protegidas con guards de autenticación
+
+🎨 UI
+
+Bootstrap para maquetación y estilos
+
+Componentes reutilizables para cards, formularios y listados
+
+🔐 Autenticación
+
+El frontend trabaja con autenticación basada en JWT:
+
+El usuario hace login
+
+El backend devuelve un token
+
+El token se guarda en el cliente
+
+Un interceptor lo adjunta a cada petición protegida
+
+Esto permite que cada usuario solo pueda acceder a sus propias familias, miembros y eventos.
+
+🌍 Entornos y Configuración
+
+Se utilizaron archivos de entorno para evitar URLs hardcodeadas.
 
 Desarrollo
 
@@ -71,17 +118,23 @@ Uso en servicios:
 
 this.http.post(`${environment.apiUrl}/auth/login`, payload);
 
-🌍 Deploy en Netlify
+🚀 Deploy
 
-El frontend está preparado para desplegarse como SPA en Netlify.
+El frontend está preparado como SPA para ser desplegado en Netlify.
 
-Build settings
-Opción Valor
-Build command npm run build
-Publish directory dist/family-scheduler-front/browser
-🔁 Redirects para SPA (IMPORTANTE)
+Configuración necesaria:
 
-Crear netlify.toml en la raíz:
+Build command
+
+npm run build
+
+Publish directory
+
+dist/family-scheduler-front/browser
+
+Redirects (para evitar 404 en rutas internas)
+
+netlify.toml
 
 [build]
 command = "npm run build"
@@ -92,69 +145,28 @@ from = "/\*"
 to = "/index.html"
 status = 200
 
-🧪 Funcionalidades actuales
+🧪 Usuario de Demostración
 
-Registro y login de usuarios
+Solo existe un usuario demo para pruebas:
 
-Dashboard familiar
+Email: laura.lopez@demo.com
 
-Listado de miembros de la familia
+Password: Demo1234!
 
-Listado de hijos
+Este usuario tiene una familia precargada con miembros y eventos para mostrar la aplicación en funcionamiento.
 
-Listado de eventos familiares
+🛠️ Stack Tecnológico
+| Tecnología | Uso |
+| --------------- | ------------------- |
+| Angular | Framework principal |
+| TypeScript | Tipado estático |
+| Angular Signals | Estado reactivo |
+| Angular Router | Navegación |
+| HTTP Client | Consumo de API |
+| Bootstrap | UI |
+| Netlify | Hosting frontend |
 
-Diferenciación visual de eventos por tipo
+✍️ Autora
 
-👥 Usuarios de prueba
-
-Puedes usar estas cuentas para probar la app:
-
-Password para todos: Demo1234!
-
-| Nombre        | Email                                     | ID  | Familia |
-| ------------- | ----------------------------------------- | --- | ------- |
-| Ana Rivera    | [ana@demo.com](mailto:ana@demo.com)       | 11  | Rivera  |
-| Carlos Rivera | [carlos@demo.com](mailto:carlos@demo.com) | 12  | Rivera  |
-| Mei Chen      | [mei@demo.com](mailto:mei@demo.com)       | 13  | Chen    |
-| Liam Chen     | [liam@demo.com](mailto:liam@demo.com)     | 14  | Chen    |
-| Sofía Novak   | [sofia@demo.com](mailto:sofia@demo.com)   | 15  | Novak   |
-| Marko Novak   | [marko@demo.com](mailto:marko@demo.com)   | 16  | Novak   |
-| Laura García  | [laura@demo.com](mailto:laura@demo.com)   | 17  | García  |
-| Diego García  | [diego@demo.com](mailto:diego@demo.com)   | 18  | García  |
-| Amina Okoye   | [amina@demo.com](mailto:amina@demo.com)   | 19  | Okoye   |
-| Sam Okoye     | [sam@demo.com](mailto:sam@demo.com)       | 20  | Okoye   |
-
-Cada usuario solo ve su propia familia, hijos y eventos asociados.
-
-🛠️ Tecnologías utilizadas
-
-Angular (Standalone Components)
-
-Angular Signals
-
-Reactive Forms
-
-Bootstrap
-
-Netlify (frontend hosting)
-
-Render (backend hosting)
-
-📌 Notas importantes
-
-El backend debe permitir CORS desde la URL de Netlify
-
-El frontend usa JWT para autenticación
-
-Las imágenes de avatar se gestionan en el frontend, no en la base de datos
-
-Los datos de ejemplo están cargados para mostrar la app en funcionamiento
-
-🔗 Demo
-
-Frontend (Netlify)
-https://family-scheduler-front.netlify.app
-
-Backend (Render)
-https://family-scheduler-project-backend.onrender.com
+Laura Montironi
+Desarrolladora Full-Stack en formación, enfocada en crear aplicaciones web con arquitectura real, seguridad y buenas prácticas.

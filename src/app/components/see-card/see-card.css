@@ -1,0 +1,93 @@
+.page {
+    padding: 24px 14px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin: 0 auto 18px;
+    max-width: 980px;
+}
+
+.panel {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .95);
+    border: 1px solid rgba(109, 40, 217, .16);
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar.xl {
+    width: 84px;
+    height: 84px;
+    border-radius: 18px;
+    object-fit: cover;
+}
+
+.name {
+    margin: 0;
+    font-weight: 900;
+}
+
+.pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.pill {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: .8rem;
+    background: rgba(124, 58, 237, .14);
+    border: 1px solid rgba(124, 58, 237, .2);
+}
+
+.grid {
+    margin-top: 16px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid .full {
+    grid-column: 1 / -1;
+}
+
+.btn.ghost {
+    border-radius: 14px;
+    padding: 10px 14px;
+    border: 2px solid #7c3aed;
+    background: #fff;
+    font-weight: 900;
+}
+
+.chip {
+    display: inline-flex;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-weight: 900;
+    background: rgba(124, 58, 237, .14);
+    border: 1px solid rgba(124, 58, 237, .2);
+}
+
+.title {
+    margin: 10px 0 4px;
+    font-weight: 950;
+}
+
+.subtitle {
+    margin: 0;
+    opacity: .75;
+}
