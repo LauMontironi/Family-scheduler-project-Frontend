@@ -27,13 +27,18 @@ export class EventCalendarComponent implements OnInit {
 
   private palette = ['#2563eb', '#16a34a', '#dc2626', '#7c3aed', '#ea580c', '#0891b2', '#0f172a', '#db2777'];
 
+  private isMobile = window.innerWidth < 768;
+
   calendarOptions: any = {
-    initialView: 'dayGridMonth',
+    
+    initialView: this.isMobile ? 'timeGridDay' : 'dayGridMonth',
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     headerToolbar: {
-      left: 'prev,next today',
+     
+      left: this.isMobile ? 'prev,next' : 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+     
+      right: this.isMobile ? 'dayGridMonth,timeGridDay' : 'dayGridMonth,timeGridWeek,timeGridDay'
     },
     nowIndicator: true,
     scrollTime: '08:00:00',
