@@ -8,13 +8,13 @@ import { MemberUpdate } from './components/member-update/member-update';
 import { Events } from './pages/events/events';
 import { SeeCard } from './components/see-card/see-card';
 import { NotFoundPage  } from './components/pages/not-found/not-found';
+import { EventCalendarComponent } from './pages/event-calendar/event-calendar';
 
 export const routes: Routes = [
   {
     path: '',
     component: LayoutShell,
     children: [
-      // { path: '',pathMatch:'full', redirectTo: '/FamilyHome' },
       { path: '', component: Landing },
       { path: 'welcome', component: WelcomePage },
       { path: 'family', component: FamilyHome },
@@ -22,8 +22,11 @@ export const routes: Routes = [
       { path: 'member-update', component: MemberUpdate },
       { path: 'member/:id', component: SeeCard },
       { path: 'events', component: Events },
-      { path: '**', component: NotFoundPage  }
-
+      { path: 'calendar', component: EventCalendarComponent },
+      { path: '**', component: NotFoundPage }
     ],
   },
+
+ 
+  { path: '**', component: NotFoundPage }
 ];

@@ -1,0 +1,34 @@
+<div class="cal-wrap">
+    <div class="cal-header">
+        <div>
+            <h2>Calendario</h2>
+            <p>Vista semanal para ver horarios y solapamientos</p>
+        </div>
+
+        <button class="btn btn-outline-dark" (click)="backToEvents()">
+            ← Volver a eventos
+        </button>
+    </div>
+
+    <div class="legend">
+        @for (m of members(); track m.id) {
+        <span class="pill" [style.background]="colorForMemberId(m.id)">
+            {{ m.full_name || m.name || ('Miembro ' + m.id) }}
+        </span>
+        }
+    </div>
+
+    <div class="cal-card">
+        <full-calendar [options]="calendarOptions"></full-calendar>
+        @if (loading()) {
+        <div class="text-center p-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Buscando eventos en la familia...</p>
+        </div>
+        } @else if (!calendarOptions.events || calendarOptions.events.length === 0) {
+        <div class="text-center p-5">
+            <p class="mt-2 text-muted mb-0">No hay eventos para mostrar.</p>
+        </div>
+        }
+    </div>
+</div>

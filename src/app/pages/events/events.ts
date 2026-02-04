@@ -183,4 +183,19 @@ export class Events implements OnInit {
       },
     });
   }
+
+goToCalendar() {
+  const fid = this.familyId();
+  if (!fid) return;
+
+  const mid = this.memberId(); // puede ser null
+  this.router.navigate(['/calendar'], {
+    queryParams: {
+      familyId: fid,
+      ...(mid ? { memberId: mid } : {})
+    }
+  });
+}
+
+
 }
