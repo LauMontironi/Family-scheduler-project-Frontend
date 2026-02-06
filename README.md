@@ -121,6 +121,7 @@ this.http.post(`${environment.apiUrl}/auth/login`, payload);
 🚀 Deploy
 
 El frontend está preparado como SPA para ser desplegado en Netlify.
+(https://family-scheduler-project.vercel.app/)
 (https://family-scheduler-front.netlify.app/)
 
 Configuración necesaria:
